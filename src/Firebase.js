@@ -4,13 +4,13 @@ import 'firebase/compat/database'
 import 'firebase/compat/storage'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDcb_AzOW6GozHRaqo3fUFFFfip1AtxYC8",
-  authDomain: "first-proj-b46aa.firebaseapp.com",
-  projectId: "first-proj-b46aa",
-  storageBucket: "first-proj-b46aa.firebasestorage.app",
-  messagingSenderId: "526248057342",
-  appId: "1:526248057342:web:f8f87440923551aabec8af",
-  measurementId: "G-3SY6YTY9DW"
+  apiKey: "AIzaSyBQj9cjlXXgTZiXdYgTVAxS0JLSON_95UY",
+  authDomain: "fir-541a7.firebaseapp.com",
+  databaseURL: "https://fir-541a7-default-rtdb.firebaseio.com",
+  projectId: "fir-541a7",
+  storageBucket: "fir-541a7.appspot.com",
+  messagingSenderId: "997982141554",
+  appId: "1:997982141554:web:eab0bb7b21e0168d4e56eb"
   };
 
   const app= firebase.initializeApp(firebaseConfig)
