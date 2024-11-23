@@ -22,7 +22,7 @@ navigate("/AdminBlogDetail")
               <div className="col-xl-6 col-lg-6 col-md-6">
                 <div className="news-card-thirteen">
                   <div className="news-card-img">
-                    <img onClick={()=>open(key)} loading='lazy' src={props?.data[key]?.Image?.url} style={{"height":"100%","width":"100%"}} alt="Iamge" />
+                    <img onClick={()=>open(key)} loading='lazy' src={props?.data[key]?.Image?.url} style={{"height":"400px","width":"400px","border":"2px solid white"}} alt="Iamge" />
                     <a onClick={()=>open(key)} className="news-cat">{props?.data[key]?.Category}</a>
                   </div>
                   <div className="news-card-info">
@@ -189,19 +189,7 @@ navigate("/AdminBlogDetail")
                 </button>
               </form>
             </div>
-            <div className="sidebar-widget">
-              <h3 className="sidebar-widget-title">Categories</h3>
-              <ul className="category-widget list-style">
-                <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Celebration <span>(6)</span></a></li>
-                <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Culture<span>(3)</span></a></li>
-                <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Fashion<span>(2)</span></a></li>
-                <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Inspiration<span>(8)</span></a></li>
-                <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Lifestyle<span>(6)</span></a></li>
-                <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Politics<span>(2)</span></a></li>
-                <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Trending<span>(4)</span></a></li>
-              </ul>
-            </div>
-            <div className="sidebar-widget">
+                    <div className="sidebar-widget">
               <h3 className="sidebar-widget-title">Recent Posts</h3>
               <div className="pp-post-wrap">
                 <div className="news-card-one">
@@ -258,6 +246,16 @@ navigate("/AdminBlogDetail")
                 </div>
               </div>
             </div> */}
+           {
+            props?.category?.map((obj,index)=>{
+              return(
+            
+                <li key={index}><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />{obj.Category} <span>({obj.Times})</span></a></li>
+         
+              )
+            })
+           }
+    <br/> <br/>
             <div className="sidebar-widget">
               <h3 className="sidebar-widget-title">Popular Tags</h3>
               <ul className="tag-list list-style">

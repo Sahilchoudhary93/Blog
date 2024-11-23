@@ -9,20 +9,35 @@ const AdminBlogDetail = () => {
 const navigate=useNavigate()
 const [data,setdata]=useState(null)
 const {fetchblogs}=useContext(AdminBlogContext)
+const [current,setcurrent]= useState(JSON.parse(localStorage.getItem("CurrentBlog")))
+const[nextblog,setnextblog]=useState(null)
+const[previousblog,setpreviousblog]=useState(null)
 useEffect(()=>{
   if(fetchblogs){
-    const currentblog=JSON.parse(localStorage.getItem("CurrentBlog"))
-    if(!currentblog) return navigate("/Blogs")
-     if(!fetchblogs[currentblog]) return navigate("/Blogs")
-      const result=Object.keys(fetchblogs).filter((key)=>key===currentblog)
+    if(!current) return navigate("/Blogs")
+     if(!fetchblogs[current]) return navigate("/Blogs")
+      const result=Object.keys(fetchblogs).filter((key)=>key===current)
     if(result.length===0) return navigate("/Blogs")
-      setdata(fetchblogs[currentblog])
+      setdata(fetchblogs[current])
   }
-},[fetchblogs])  
+  const array=Object.keys(fetchblogs)
+  let currentblogindex=null
+  for(let i=0;i<array.length;i++){
+    if(array[i]===current){
+      currentblogindex=i
+break;
+    }
+  }
+  const next= currentblogindex+1
+  const previous= currentblogindex-1
+  if(next<array.length)  setnextblog(array[next])
+    if(previous>-1) setpreviousblog(array[previous])
+      else setpreviousblog(null)
+},[fetchblogs,current])  
 return (
     <div>
-        <AdminHeader/>
-        <Suspense fallback={<div className='preloaders'><div className='loaders'></div></div>}>
+        <AdminHeader blog="active"/>
+        <Suspense fun={setcurrent} next={nextblog} previous={previousblog} alldata={fetchblogs} current={current} fallback={<div className='preloaders'><div className='loaders'></div></div>}>
         <AdminBlogDetailComp data={data}/>
         </Suspense>
         <AdminFooter/>
