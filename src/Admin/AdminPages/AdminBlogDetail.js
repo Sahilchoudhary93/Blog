@@ -37,8 +37,8 @@ break;
 return (
     <div>
         <AdminHeader blog="active"/>
-        <Suspense fun={setcurrent} next={nextblog} previous={previousblog} alldata={fetchblogs} current={current} fallback={<div className='preloaders'><div className='loaders'></div></div>}>
-        <AdminBlogDetailComp data={data}/>
+        <Suspense  fallback={<div className='preloaders'><div className='loaders'></div></div>}>
+        <AdminBlogDetailComp fun={setcurrent} next={nextblog} previous={previousblog} alldata={fetchblogs} current={current} data={data}/>
         </Suspense>
         <AdminFooter/>
     </div>

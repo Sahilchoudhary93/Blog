@@ -55,7 +55,7 @@ const uploads=(event)=>{
             break;
         }
 
-        const ext=file[1].type.split("/")
+        const ext=file[i].type.split("/")
         if(ext[0]!=="image"){
             count++
         }
@@ -101,7 +101,7 @@ async function save(e)
                     return navigate("/Blogs",{replace:true})
                  } 
 
-            const fileref= storage.child(headimg.name)
+            const fileref= storage.child(Date.now()+headimg.name)
             await fileref.put(headimg)
             const url=await fileref.getDownloadURL()
             const path= fileref.fullPath
@@ -112,18 +112,20 @@ async function save(e)
                 let array=[]
                 for (let a= 0; a< image.length; a++) {
                    
-            const filerefs= storage.child(image.name)
-            await filerefs.put(image)
-            const urls= filerefs.getDownloadURL()
+            const filerefs= storage.child(Date.now()+image[a].name)
+            await filerefs.put(image[a])
+            const urls= await filerefs.getDownloadURL()
             const paths= filerefs.fullPath
             array.push({urls,paths})                    
                 }
-                mydata={...mydata,"Sub_Heading":array}
+                mydata={...mydata,"Images":array}
             }
             Firebase.child("Blogs").child(user).push(mydata,err=>{
                 if(err) return alert("Somthing went wrong")
                     else return alert("Your Blog has been successfully uploaded")
+                console.log(err)
             })
+            
             setTimeout(()=> navigate("/Blogs"),1500)
         }catch(err){
                 alert("Somthing went wrong")

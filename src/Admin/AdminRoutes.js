@@ -29,7 +29,7 @@ return navigate("/",{replace:true})
     setloader(false)
 
      },[])
-     console.log(data);
+
   return (
     <AdminBlogContext.Provider value={{"fetchblogs":data, "loader":loader}}>
     <Outlet/>

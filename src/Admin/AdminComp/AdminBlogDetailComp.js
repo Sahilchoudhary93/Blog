@@ -1,8 +1,9 @@
 import React from 'react'
+import { replace, useNavigate } from 'react-router-dom'
 
 const AdminBlogDetailComp = (props) => {
 
-    console.log(props)
+     console.log(props)
 
     const GetDate=(date)=>{
         if(!date) return "-----"
@@ -10,6 +11,13 @@ const AdminBlogDetailComp = (props) => {
         const d= new Date(date)
             return (`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`)
     }
+    const navigate=useNavigate()
+    const open=(key)=>{
+        localStorage.setItem("CurrentBlog",JSON.stringify(key))
+        navigate("/AdminBlogDetail",{replace:true})
+        props.fun(key)
+
+          }
   return (
     <div className="news-details-wrap ptb-100">
                 <div className="container">
@@ -53,15 +61,20 @@ const AdminBlogDetailComp = (props) => {
                                 })
                               }
                                 </article>
-                            <div className="post-pagination">
-                                <a className="prev-post" href="business-details.html">
+
+                            {
+                                props?.previous?<a onClick={()=>open(props.previous)} className="prev-post" href="#">
                                     <span>PREVIOUS</span>
-                                    <h6>The Future Of Business: Predictions And Trends To Watch</h6>
-                                </a>
-                                <a className="next-post" href="business-details.html">
+                                    <h6>{props.alldata[props.previous].Title}</h6>
+                                </a>:<a></a>
+                            }
+                            {
+                                props?.next && <a onClick={()=>open(props.previous)}  className="next-post" href="#">
                                     <span>NEXT</span>
-                                    <h6>From Start-up To Scale-up: Navigating Growth In Your Business</h6>
+                                    <h6>{props.alldata[props.next].Title}</h6>
                                 </a>
+                            }
+                                
                             </div>
                             <h3 className="comment-box-title">3 Comments</h3>
                             <div className="comment-item-wrap">
@@ -150,7 +163,7 @@ const AdminBlogDetailComp = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <div id="cmt-form">
+                            {/* <div id="cmt-form">
                                 <div className="mb-30">
                                     <h3 className="comment-box-title">Leave A Comment</h3>
                                     <p>Your email address will not be published. Required fields are marked.</p>
@@ -185,7 +198,7 @@ const AdminBlogDetailComp = (props) => {
                                         </div>
                                     </div>
                                 </form>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="col-lg-4">
                             <div className="sidebar">
@@ -200,13 +213,13 @@ const AdminBlogDetailComp = (props) => {
                                 <div className="sidebar-widget">
                                     <h3 className="sidebar-widget-title">Categories</h3>
                                     <ul className="category-widget list-style">
-                                        <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Celebration <span>(6)</span></a></li>
-                                        <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Culture<span>(3)</span></a></li>
-                                        <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Fashion<span>(2)</span></a></li>
-                                        <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Inspiration<span>(8)</span></a></li>
-                                        <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Lifestyle<span>(6)</span></a></li>
-                                        <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Politics<span>(2)</span></a></li>
-                                        <li><a href="business.html"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Trending<span>(4)</span></a></li>
+                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Celebration <span>(6)</span></a></li>
+                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Culture<span>(3)</span></a></li>
+                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Fashion<span>(2)</span></a></li>
+                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Inspiration<span>(8)</span></a></li>
+                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Lifestyle<span>(6)</span></a></li>
+                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Politics<span>(2)</span></a></li>
+                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Trending<span>(4)</span></a></li>
                                     </ul>
                                 </div>    
                                {
@@ -214,7 +227,7 @@ const AdminBlogDetailComp = (props) => {
                                     if(key!==props.current){
                                         const date= new Date(props?.alldata[key]?.Date)
                                         return(
-                                            <div key={index} className="news-card-one">
+                                            <div style={{"position":"absolute","right":"0px"}} key={index} className="news-card-one">
                                             <div className="news-card-img">
                                                 <img style={{"height":"100%","widows":"100%","borderRadius":"50%"}} src={props?.alldata[key]?.Image?.url} alt="Image" />
                                             </div>
@@ -253,7 +266,7 @@ const AdminBlogDetailComp = (props) => {
                         </div>
                     </div>
                 </div>
-                </div>
+              
 
 
   )

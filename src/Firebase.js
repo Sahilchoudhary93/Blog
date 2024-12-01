@@ -4,13 +4,12 @@ import 'firebase/compat/database'
 import 'firebase/compat/storage'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBQj9cjlXXgTZiXdYgTVAxS0JLSON_95UY",
-  authDomain: "fir-541a7.firebaseapp.com",
-  databaseURL: "https://fir-541a7-default-rtdb.firebaseio.com",
-  projectId: "fir-541a7",
-  storageBucket: "fir-541a7.appspot.com",
-  messagingSenderId: "997982141554",
-  appId: "1:997982141554:web:eab0bb7b21e0168d4e56eb"
+    apiKey: "AIzaSyAtbKTRPM2O_YHU1FXezDf57Vu8sTnTaGI",
+    authDomain: "bloggingweb-7e097.firebaseapp.com",
+    projectId: "bloggingweb-7e097",
+    storageBucket: "bloggingweb-7e097.appspot.com",
+    messagingSenderId: "7042042279",
+    appId: "1:7042042279:web:e4423ce6c73e3ec5634e82"
   };
 
   const app= firebase.initializeApp(firebaseConfig)

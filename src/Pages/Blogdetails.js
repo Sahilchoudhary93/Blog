@@ -6,7 +6,7 @@ import Footer from '../Components/Footer'
 const Blogdetails = () => {
   return (
     <div>
-        <Header/>
+        <Header blog="acitve"/>
         <BlogDetailComp/>
         <Footer/>
     </div>

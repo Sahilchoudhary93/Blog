@@ -1,22 +1,30 @@
-import React from 'react'
+import React, { Suspense, useContext, useEffect } from 'react'
 import Header from '../Components/Header'
 import Footer from '../Components/Footer'
-import HomeBlog from '../Components/HomeComponents/HomeBlog'
 import HomeLatestBlog from '../Components/HomeComponents/HomeLatestBlog'
-import HomeInstaSlider from '../Components/HomeComponents/HomeInstaSlider'
-import TrendingNow from '../Components/HomeComponents/TrendingNow'
-import Newsletter from '../Components/Newsletter'
-
+import UseContext from './Context/UserContext'
+const HomeInstaSlider= React.lazy(()=>import('../Components/HomeComponents/HomeInstaSlider'))
+const TrendingNow= React.lazy(()=>import('../Components/HomeComponents/TrendingNow'))
+const HomeBlog= React.lazy(()=>import('../Components/HomeComponents/HomeBlog'))
 const Home = () => {
+    const{fetchlatestimages,fetchlatestblogs,loading}=useContext(UseContext)
+    useEffect(()=>localStorage.clear(),[])
     return (
         <div>
-            <Header/>
+            <Header home="active"/>
+{loading && <div className='preloaders'><div className='loaders'></div></div>}
+<Suspense fallback={<div className='preloaders'><div className='loaders' ></div></div>}>           
             <TrendingNow/>
-            <HomeBlog/>
+</Suspense>
+<Suspense fallback={<div className='preloaders'><div className='loaders' ></div></div>}>
+            <HomeBlog data={fetchlatestblogs}/>
+</Suspense>
             <HomeLatestBlog/>
-            <HomeInstaSlider/>
+<Suspense fallback={<div className='preloaders'><div className='loaders' ></div></div>}>
+            <HomeInstaSlider data={fetchlatestimages}/>
+</Suspense>
             <Footer/>
-            {/* <Newsletter/> */}
+             {/* <Newsletter/>  */}
         </div>
     )
 }

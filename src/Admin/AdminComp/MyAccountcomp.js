@@ -1,38 +1,105 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
+import { replace, useNavigate } from 'react-router-dom'
+import Firebase, { storage } from '../../Firebase'
 
-const MyAccountcomp = () => {
+const MyAccountcomp = (props) => {
+const img= useRef()
+  const [image,setimage]= useState(null)
+const [btndis,setbtndis] = useState(false)
+const navigate= useNavigate()
+
+const upload=(event)=>{
+  const file= event.target.files[0]
+
+if(!file) return alert("No Iimage is selected")
+    const ext= file.type.split("/")
+if(ext[0]!=="image") return alert("Only Images can be uploaded")
+    if(ext[1]=="png" ||ext[1]=="jpg" ||ext[1]=="jpeg" ||ext[1]=="PNG" ||ext[1]=="jfif") 
+        {
+            return setimage(file)
+        }
+        return alert("Only png,jpg,jpeg & jfif file types are supported")
+}
+const submit= async(e)=>{
+  try{
+e.preventDefault()
+setbtndis(true)
+if(!image) return alert("Uplaod Profile Image first.")
+  const user= JSON.parse(localStorage.getItem("Users"))
+if(!user)
+   { alert("Unauthorized user")
+  window.history.replaceState(null, null, "/Login")
+return navigate("/",{replace:true})}
+  
+const fileref= storage.child(Date.now()+image.name)
+await fileref.put(image)
+const url=await fileref.getDownloadURL()
+const path= fileref.fullPath
+const object={url,path} 
+  
+Firebase.child("Users").child(user).update({ProfileImage:object})
+alert("User Updated successfully")
+}
+
+  catch(error){
+console.log(error)
+alert("Something Went wrong")
+  }
+  finally{
+setbtndis(false)
+setimage({})
+  }
+}
+console.log(props.data)
   return (
     <div>
       <div className="author-wrap">
     <div className="container">
-      <div className="author-box">
+     {
+      props.user.ProfileImage? <div className="author-box">
+      <div className="author-img">
+      <img alt="Image" src={props?.user?.ProfileImage?props.user?.ProfileImage.url:"assets/img/author/single-author.jpg"} />
+      </div>
+      <div className="author-info">
+        <h4>{props?.user?.Name}</h4>
+        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered
+          alteration in some form, by injected humour, or ran domised words which don't look even slightly
+          believable.</p>
+        <div className="author-profile">
+          <ul className="social-profile list-style">
+            <li><a href="https://www.fb.com/" target="_blank"><i className="ri-facebook-fill" /></a></li>
+            <li><a href="https://www.twitter.com/" target="_blank"><i className="ri-twitter-fill" /></a>
+            </li>
+            <li><a href="https://www.instagram.com/" target="_blank"><i className="ri-instagram-line" /></a></li>
+            <li><a href="https://www.linkedin.com/" target="_blank"><i className="ri-linkedin-fill" /></a>
+            </li>
+          </ul>
+    
+        </div>
+      </div>
+    </div>: <div className="author-box">
         <div className="author-img">
-          <img alt="Image" data-cfsrc="assets/img/author/single-author.jpg" style={{display: 'none', visibility: 'hidden'}} /><noscript>&lt;img src="assets/img/author/single-author.jpg"
-            alt="Image"&gt;</noscript>
-        </div>
-        <div className="author-info">
-          <h4>Scarlett Emily</h4>
-          <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered
-            alteration in some form, by injected humour, or ran domised words which don't look even slightly
-            believable.</p>
-          <div className="author-profile">
-            <ul className="social-profile list-style">
-              <li><a href="https://www.fb.com/" target="_blank"><i className="ri-facebook-fill" /></a></li>
-              <li><a href="https://www.twitter.com/" target="_blank"><i className="ri-twitter-fill" /></a>
-              </li>
-              <li><a href="https://www.instagram.com/" target="_blank"><i className="ri-instagram-line" /></a></li>
-              <li><a href="https://www.linkedin.com/" target="_blank"><i className="ri-linkedin-fill" /></a>
-              </li>
-            </ul>
-            <div className="author-stat">
-              <span>40 Articles</span>
-              <span>191 Comments</span>
+        <div className="sidebar">
+                             <div className="author-img">
+      <button onClick={()=>img.current.click()} className='btn btn-warning'>Upload</button>
+      <img alt="Image" src={image?URL.createObjectURL(image):'assets/img/newsletter-bg.webp'}  />
+      <input type='file' hidden onChange={upload} ref={img} accept='image/*'/>
+      <button onClick={submit} className='btn btn-primary'>Submit</button>
+      </div>
+      
+      {/* <div className="author-info">
+        <h4>Scarlett Emily</h4>
+        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered
+          alteration in some form, by injected humour, or ran domised words which don't look even slightly
+          believable.</p>
+          </div> */}
+
             </div>
-          </div>
-        </div>
-      </div>
+            </div>
+
+
     </div>
-      </div>
+      }      </div>
       <div className="popular-news-three ptb-100">
     <div className="container">
       <div className="row gx-5">
@@ -40,123 +107,42 @@ const MyAccountcomp = () => {
           <div className="section-title-two mb-40">
             <h2>Posts</h2>
           </div>
-          <div className="popular-news-wrap">
-            <div className="news-card-five">
-              <div className="news-card-img">
-                <img src="assets/img/news/news-70.webp" alt="Image" />
-                <a href="business.html" className="news-cat">Lifestyle</a>
-              </div>
-              <div className="news-card-info">
-                <h3><a href="business-details.html">Live Your Best Life: Tips For Achieving A Healthy
-                    And Fulfilling Lifestyle</a></h3>
-                <p>Lorem ipsum dosectetur adipisicing elit, sed do.Lorem ipsum dolor sit amet conse ctet
-                  fringilla purus leo dignissim congue. Mauris elementum accumsan.</p>
-                <ul className="news-metainfo list-style">
-                  <li className="author">
-                    <span className="author-img">
-                      <img src="assets/img/author/author-thumb-1.webp" alt="Image" />
-                    </span>
-                    <a href="author.html">James William</a>
-                  </li>
-                  <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">Feb 03,
-                      2024</a></li>
-                  <li><i className="fi fi-rr-clock-three" />10 Min Read</li>
-                </ul>
-              </div>
-            </div>
-            <div className="news-card-five">
-              <div className="news-card-img">
-                <img src="assets/img/news/news-71.webp" alt="Image" />
-                <a href="business.html" className="news-cat">Business</a>
-              </div>
-              <div className="news-card-info">
-                <h3><a href="business-details.html">Maximizing Profits: A Guide To Streamlining Your
-                    Business Operations</a></h3>
-                <p>Lorem ipsum dosectetur adipisicing elit, sed do.Lorem ipsum dolor sit amet conse ctet
-                  fringilla purus leo dignissim congue. Mauris elementum accumsan.</p>
-                <ul className="news-metainfo list-style">
-                  <li className="author">
-                    <span className="author-img">
-                      <img src="assets/img/author/author-thumb-2.webp" alt="Image" />
-                    </span>
-                    <a href="author.html">Amela Mia</a>
-                  </li>
-                  <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">Feb 03,
-                      2024</a></li>
-                  <li><i className="fi fi-rr-clock-three" />12 Min Read</li>
-                </ul>
-              </div>
-            </div>
-            <div className="news-card-five">
-              <div className="news-card-img">
-                <img src="assets/img/news/news-72.webp" alt="Image" />
-                <a href="business.html" className="news-cat">Events</a>
-              </div>
-              <div className="news-card-info">
-                <h3><a href="business-details.html">Making Events Memorable: A Guide To Planning
-                    Successful Gatherings</a></h3>
-                <p>Lorem ipsum dosectetur adipisicing elit, sed do.Lorem ipsum dolor sit amet conse ctet
-                  fringilla purus leo dignissim congue. Mauris elementum accumsan.</p>
-                <ul className="news-metainfo list-style">
-                  <li className="author">
-                    <span className="author-img">
-                      <img src="assets/img/author/author-thumb-3.webp" alt="Image" />
-                    </span>
-                    <a href="author.html">Ava Sophia</a>
-                  </li>
-                  <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">Feb 03,
-                      2024</a></li>
-                  <li><i className="fi fi-rr-clock-three" />8 Min Read</li>
-                </ul>
-              </div>
-            </div>
-            <div className="news-card-five">
-              <div className="news-card-img">
-                <img src="assets/img/news/news-73.webp" alt="Image" />
-                <a href="business.html" className="news-cat">Photography</a>
-              </div>
-              <div className="news-card-info">
-                <h3><a href="business-details.html">Capturing Life's Moments: A Guide to Improving Your
-                    Photography Skills</a></h3>
-                <p>Lorem ipsum dosectetur adipisicing elit, sed do.Lorem ipsum dolor sit amet conse ctet
-                  fringilla purus leo dignissim congue. Mauris elementum accumsan.</p>
-                <ul className="news-metainfo list-style">
-                  <li className="author">
-                    <span className="author-img">
-                      <img src="assets/img/author/author-thumb-4.webp" alt="Image" />
-                    </span>
-                    <a href="author.html">Olivia Emma</a>
-                  </li>
-                  <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">Feb 03,
-                      2024</a></li>
-                  <li><i className="fi fi-rr-clock-three" />10 Min Read</li>
-                </ul>
-              </div>
-            </div>
-            <div className="news-card-five">
-              <div className="news-card-img">
-                <img src="assets/img/news/news-74.webp" alt="Image" />
-                <a href="business.html" className="news-cat">Culture</a>
-              </div>
-              <div className="news-card-info">
-                <h3><a href="business-details.html">Exploring the World's Diversity: A Journey Through
-                    Different Cultures</a></h3>
-                <p>Lorem ipsum dosectetur adipisicing elit, sed do.Lorem ipsum dolor sit amet conse ctet
-                  fringilla purus leo dignissim congue. Mauris elementum accumsan.</p>
-                <ul className="news-metainfo list-style">
-                  <li className="author">
-                    <span className="author-img">
-                      <img src="assets/img/author/author-thumb-5.webp" alt="Image" />
-                    </span>
-                    <a href="author.html">Lima Noah</a>
-                  </li>
-                  <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">Feb 03,
-                      2024</a></li>
-                  <li><i className="fi fi-rr-clock-three" />15 Min Read</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+{/* {
+  props?.data?.fetchblogs?  
+         <div className="popular-news-wrap">
+  <div className="news-card-five">
+    <div className="news-card-img">
+      <img src={props?.data?.fetchblogs?.Image?props?.data?.fetchblogs?.Image.url:""} alt="Image" />
+      <a className="news-cat">{props?.data?.fetchblogs?props?.data?.fetchblogs?.Category:""}</a>
+    </div>
+    <div className="news-card-info">
+      <h3><a >{props?.data?.fetchblogs?.Title?props?.data?.fetchblogs?.Title:""}</a></h3>
+      {/* <p>Lorem ipsum dosectetur adipisicing elit, sed do.Lorem ipsum dolor sit amet conse ctet
+        fringilla purus leo dignissim congue. Mauris elementum accumsan.</p> */}
+      <ul className="news-metainfo list-style">
+        <li className="author">
+        </li>
+        <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">Feb 03,
+            2024</a></li>
+        <li><i className="fi fi-rr-user" />{props?.data?.fetchblogs?.Author?props?.data?.fetchblogs?.Author:""}</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+  :<h1>No Blogs Available</h1>
+
+ 
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
           <ul className="page-nav list-style text-center mt-5">
             <li><a href="author.html"><i className="flaticon-arrow-left" /></a></li>
             <li><a className="active" href="author.html">01</a></li>
@@ -257,8 +243,7 @@ const MyAccountcomp = () => {
         </div>
       </div>
     </div>
-      </div>
-    </div>
+     
   )
 }
 

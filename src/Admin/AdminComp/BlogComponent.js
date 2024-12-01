@@ -1,15 +1,46 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Firebase, { storage } from '../../Firebase'
 
 const BlogComponent = (props) => {
   const navigate= useNavigate()
-
+const[btndis,setbtndis]=useState(false)
+const [loader,setloader]=useState(false)
   const open=(key)=>{
 localStorage.setItem("CurrentBlog",JSON.stringify(key))
 navigate("/AdminBlogDetail")
   }
+async function del(key){ 
+  // console.log(key)
+try {
+  setbtndis(true)
+setloader(true)
+const user= JSON.parse(localStorage.getItem("Users"))
+if(!user) return alert("Unauthorized User")
+  if (props.data[key].Images){
+for(let i=0;i<props.data[key].Images.length;i++){
+await storage.child(props.data[key].Images[i].paths).delete()
+}
+  }
+  await storage.child(props.data[key].Image.path).delete()
+  Firebase.child(`Blogs/${user}/${key}`).remove(err=>{
+    if(err) return alert("Something went wrong")
+      else return alert("Deleted Successfully")
+  })
+} 
+catch (error) {return alert("Something went wrong. Please try again or try after sometime.")
+console.log(error)
+ }
+ finally{
+  setbtndis(false)
+  setloader(false)
+ }
+}
   return (
   <div className="sports-wrap ptb-100">
+    {
+      loader && <div className='preloaders'><div className='loaders'></div></div>
+    }
     <div className="container">
       <div className="row gx-55 gx-5">
         <div className="col-lg-8">
@@ -30,6 +61,7 @@ navigate("/AdminBlogDetail")
                     <ul className="news-metainfo list-style">
                       <li><i className="fi fi-rr-calendar-minus" /><a onClick={()=>open(key)}>{`${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`}</a></li>
                       <li><i className="fi fi-rr-user" />By:-{props?.data[key]?.Author}</li>
+                      <li><button disabled={btndis} className='btn btn-danger' onClick={()=>del(key)}>Delete</button></li>
                     </ul>
                   </div>
                 </div>
@@ -49,6 +81,7 @@ navigate("/AdminBlogDetail")
              <ul className="news-metainfo list-style">
                <li><i className="fi fi-rr-calendar-minus" /><a onClick={()=>open(key)}>----</a></li>
                <li><i className="fi fi-rr-user" />By:-{props?.data[key]?.Author}</li>
+               <li><button>Delete</button></li>
              </ul>
             </div>
             </div>
