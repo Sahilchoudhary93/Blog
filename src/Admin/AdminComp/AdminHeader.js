@@ -3,18 +3,17 @@ import { Link, useNavigate } from 'react-router-dom'
 
 const AdminHeader = (props) => {
 const[toggle,settoggle]=useState(false)
-const navigate= useNavigate()
-
+const navigate=useNavigate()
 useEffect(function(){
-const user= JSON.parse(localStorage.getItem("Users"))
-if(!user) return navigate("/")
+    const User=JSON.parse(localStorage.getItem("Users"))
+    if(!User) return navigate("/")
 },[])
-function logout(){
+function Logout(){
     localStorage.clear()
-    window.history.replaceState(null, null, "/Login")
+    window.history.replaceState(null,null,"/Login")
     navigate("/",{replace:true})
 }
-return (
+  return (
     <div>
         <div className="navbar-area header-one" id="navbar">
                     <div className="container-fluid">
@@ -42,7 +41,7 @@ return (
                                         <Link to={'/MyAccount'} className={props.myaccount?"nav-link active":"nav-link"}>My Account</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <a onClick={logout} className="nav-link">
+                                        <a onClick={Logout} className="nav-link">
                                             Logout
                                         </a>
                                     </li>
@@ -74,7 +73,7 @@ return (
                                 <Link to={'/MyAccount'}><button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">My Account</button></Link>
                             </div>
                             <div className="accordion-item">
-                                <a onClick={logout} className="accordion-link">
+                                <a onClick={Logout} className="accordion-link">
                                 <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Logout</button>
                                 </a>
                             </div>

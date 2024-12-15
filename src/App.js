@@ -10,19 +10,19 @@ import Blog from './Pages/Blog'
 import Blogdetails from './Pages/Blogdetails'
 import Login from './Pages/Login'
 import Signup from './Pages/Signup'
-import './style.css'
-import AdminRoutes from './Admin/AdminRoutes'
+import "./Style.css"
 import AddBlog from './Admin/AdminPages/AddBlog'
 import BlogShow from './Admin/AdminPages/BlogShow'
-import AdminBlogDetail from './Admin/AdminPages/AdminBlogDetail'
 import MyAccount from './Admin/AdminPages/MyAccount'
-import UseRoute from './Pages/UseRoute'
+import AdminBlogDetail from './Admin/AdminPages/AdminBlogDetail'
+import AdminRoutes from './Admin/AdminRoutes'
+import UserRoute from './Pages/UserRoute'
 const App = () => {
   return (
     <div className='theme-dark'>
       <BrowserRouter>
         <Routes>
-          <Route element={<UseRoute/>}>
+         <Route element={<UserRoute/>}>
           <Route path='/' element={<Home />} />
           <Route path='/Author' element={<Author />} />
           <Route path='/AuthorDetails' element={<AuthorDetails />} />
@@ -33,18 +33,19 @@ const App = () => {
           <Route path='/Blogdetails' element={<Blogdetails />} />
           <Route path='/Login' element={<Login />} />
           <Route path='/Signup' element={<Signup />} />
+         </Route>
+          
+          {/* admin routes using context */}
+          <Route element={<AdminRoutes/>}>
+            <Route path='/AddBlog' element={<AddBlog />} />
+            <Route path='/Blogs' element={<BlogShow />} />
+            <Route path='/AdminBlogDetail' element={<AdminBlogDetail />} />
+            <Route path='/MyAccount' element={<MyAccount />} />
           </Route>
-          <Route  element={<AdminRoutes/>}>        
-         <Route path='AddBlog' element={<AddBlog/>} />
-          <Route path='/Blogs' element={<BlogShow/>} />
-          <Route path='AdminBlogDetail' element={<AdminBlogDetail/>} />
-          <Route path='MyAccount' element={<MyAccount/>} />
-          </Route>
-  
         </Routes>
       </BrowserRouter>
     </div>
   )
 }
 
-export default App
+export default App

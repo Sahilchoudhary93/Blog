@@ -4,8 +4,7 @@ import Errorcomp from '../Components/ErrorComponent/Errorcomp'
 const Error = () => {
   return (
     <div>
-          <Errorcomp/>
-      
+        <Errorcomp/>
     </div>
   )
 }

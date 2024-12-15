@@ -1,23 +1,18 @@
 import React from 'react'
-import { replace, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const AdminBlogDetailComp = (props) => {
-
-     console.log(props)
-
-    const GetDate=(date)=>{
-        if(!date) return "-----"
-
-        const d= new Date(date)
-            return (`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`)
-    }
     const navigate=useNavigate()
-    const open=(key)=>{
+    function GetDate(date){
+        if(!date) return "-----"
+        const d=new Date(date)
+        return (`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`);
+    }
+    function openblog(key){
         localStorage.setItem("CurrentBlog",JSON.stringify(key))
         navigate("/AdminBlogDetail",{replace:true})
         props.fun(key)
-
-          }
+      }
   return (
     <div className="news-details-wrap ptb-100">
                 <div className="container">
@@ -25,56 +20,50 @@ const AdminBlogDetailComp = (props) => {
                         <div className="col-lg-8">
                             <article>
                                 <div className="news-img">
-                                    <img loading='lazy' src={props?.data?.Image?.url} alt="Image" />
-                                    <a  className="news-cat">{props?.data?.Category}</a>
+                                    <img loading='lazy' style={{height:"400px",width:"900px",backgroundSize:"cover"}} src={props?.data?.HeadingImage?.url} alt="Image" />
+                                    <a className="news-cat">{props?.data?.Category}</a>
                                 </div>
                                 <ul className="news-metainfo list-style">
-                                    <li><i className="fi fi-rr-calendar-minus" /><a >{GetDate(props?.data?.Date)}</a></li>
+                                    <li><i className="fi fi-rr-calendar-minus" /><a>{GetDate(props?.data?.Date)}</a></li>
                                     <li><i className="fi fi-rr-user" />{props?.data?.Author}</li>
                                 </ul>
                                 <div className="news-para">
                                     <h1>{props?.data?.Heading}</h1>
                                     <p>{props?.data?.Description}</p>
                                 </div>
+                                <div className="row">
                                 {
                                     props?.data?.Images?.map(function(obj,index){
                                         return(
-                                
-                                <div key={index} className="col-md-6">
-                                    <div className="news-img">
-                                       <img src={obj?.urls?obj.urls:"assets/img/news/single-news-5.webp"} alt='Images'/>
+                                            <div key={index} className="col-md-6">
+                                        <div className="news-img">
+                                            <img style={{height:"250px",width:"420px"}} loading='lazy' src={obj?.urls?obj.urls:"assets/img/news/single-news-5.webp"} alt="Image" />
+                                        </div>
                                     </div>
-                                </div>
-                                    )
-
+                                        )
                                     })
-
                                 }
-                               
-                              {
-                                props?.data?.Sub_Headings?.map(function(obj,index){
-                                 return(   <div className="news-para">
+                                </div>
+                                {
+                                        props?.data?.SubHeadingsData?.map(function(obj,index){
+                                            return(
+                                                <div key={index} className="news-para">
                                     <h5>{obj?.Sub_Heading}</h5>
                                     <p>{obj?.Sub_Heading_Description}</p>
-                                        </div>
-                                 )
-                                })
-                              }
-                                </article>
-
-                            {
-                                props?.previous?<a onClick={()=>open(props.previous)} className="prev-post" href="#">
+                                </div>
+                                            )
+                                        })
+                                    }
+                            </article>
+                            <div className="post-pagination">
+                                {props?.previous?<a onClick={()=>openblog(props.previous)} className="prev-post">
                                     <span>PREVIOUS</span>
                                     <h6>{props.alldata[props.previous].Title}</h6>
-                                </a>:<a></a>
-                            }
-                            {
-                                props?.next && <a onClick={()=>open(props.previous)}  className="next-post" href="#">
+                                </a>:<a></a>}
+                                {props?.next && <a className="next-post" onClick={()=>openblog(props.next)}>
                                     <span>NEXT</span>
                                     <h6>{props.alldata[props.next].Title}</h6>
-                                </a>
-                            }
-                                
+                                </a>}
                             </div>
                             <h3 className="comment-box-title">3 Comments</h3>
                             <div className="comment-item-wrap">
@@ -202,73 +191,49 @@ const AdminBlogDetailComp = (props) => {
                         </div>
                         <div className="col-lg-4">
                             <div className="sidebar">
-                                <div className="sidebar-widget-two">
-                                    <form action="#" className="search-box-widget">
-                                        <input type="search" placeholder="Search" />
-                                        <button type="submit">
-                                            <i className="fi fi-rr-search" />
-                                        </button>
-                                    </form>
-                                </div>
                                 <div className="sidebar-widget">
-                                    <h3 className="sidebar-widget-title">Categories</h3>
-                                    <ul className="category-widget list-style">
-                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Celebration <span>(6)</span></a></li>
-                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Culture<span>(3)</span></a></li>
-                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Fashion<span>(2)</span></a></li>
-                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Inspiration<span>(8)</span></a></li>
-                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Lifestyle<span>(6)</span></a></li>
-                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Politics<span>(2)</span></a></li>
-                                        <li><a href="#"><img src="assets/img/icons/arrow-right.svg" alt="Image" />Trending<span>(4)</span></a></li>
-                                    </ul>
-                                </div>    
-                               {
-                               (props?.alldata && props?.current)?Object.keys(props.alldata).map((key,index)=>{
-                                    if(key!==props.current){
-                                        const date= new Date(props?.alldata[key]?.Date)
-                                        return(
-                                            <div style={{"position":"absolute","right":"0px"}} key={index} className="news-card-one">
+                                    <h3 className="sidebar-widget-title">Recent Posts</h3>
+                                    <div className="pp-post-wrap">
+                                    {
+                                        (props?.alldata && props?.current) ?Object.keys(props.alldata).reverse().map((key,index)=>{
+                                            if(key!==props.current && index<10){
+                                                const date=new Date(props?.alldata[key]?.Date)
+                                                return(
+                                            <div key={index} className="news-card-one">
                                             <div className="news-card-img">
-                                                <img style={{"height":"100%","widows":"100%","borderRadius":"50%"}} src={props?.alldata[key]?.Image?.url} alt="Image" />
+                                                <img loading='lazy' style={{borderRadius:"50%",height:"100%",width:"100%",cursor:"pointer"}} src={props?.alldata[key]?.HeadingImage?.url} alt="Image" />
                                             </div>
                                             <div className="news-card-info">
-                                                <h3><a href="#">{props?.alldata[key].Title}</a>
+                                                <h3><a>{props?.alldata[key]?.Title}</a>
                                                 </h3>
                                                 <ul className="news-metainfo list-style">
                                                     <li><i className="fi fi-rr-calendar-minus" /><a href="#">{`${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`}</a></li>
                                                 </ul>
                                             </div>
                                         </div>
-
-                                        )
+                                                )
+                                            }
+                                        }):""   
                                     }
-
-                                }):'' 
-                               
-                            }
+                                    </div>
+                                </div>
                                 <div className="sidebar-widget">
                                     <h3 className="sidebar-widget-title">Popular Tags</h3>
                                     <ul className="tag-list list-style">
-                                        <li><a href="news-by-tags.html">BUSINESS</a></li>
-                                        <li><a href="news-by-tags.html">FOOD</a></li>
-                                        <li><a href="news-by-tags.html">SCIENCE</a></li>
-                                        <li><a href="news-by-tags.html">LIFESTYLE</a></li>
-                                        <li><a href="news-by-tags.html">SPORTS</a></li>
-                                        <li><a href="news-by-tags.html">PHOTO</a></li>
-                                        <li><a href="news-by-tags.html">TECHNOLOGY</a></li>
-                                        <li><a href="news-by-tags.html">CONTENT</a></li>
-                                        <li><a href="news-by-tags.html">FEATURED</a></li>
-                                        <li><a href="news-by-tags.html">AUDIO</a></li>
-                                        <li><a href="news-by-tags.html">FASHION</a></li>
+                                        {
+                                            props?.data && props.data.Tags.split(",").map((tag,index)=>{
+                                                return(
+                                                    <li key={index}><a href="#">{tag}</a></li>
+                                                )
+                                            })
+                                        }
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-              
-
-
+    </div>
   )
 }
 

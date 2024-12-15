@@ -1,58 +1,52 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Firebase,{auth} from '../Firebase'
+import Firebase,{auth} from "../Firebase"
 const Signup = () => {
-  const[Obj,SetObj]= useState({})
-const [btn,disbtn]= useState(false)
-  const d= new Date()
-  const date= `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`
-  function NameChange(event){
-    const name = event.target.value.replace(/[^a-zA-Z\s]/g, '');
-    SetObj({...Obj,"Name":name});
+const[obj,setobj]=useState({})
+const[btndisable,setbtndisable]=useState(false)
+const d=new Date()
+const date=`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`
+
+function set(event){
+  setobj({...obj,[event.target.name]:event.target.value,"Date":date})
+}
+function NameChange(event){
+  const name = event.target.value.replace(/[^a-zA-Z\s]/g,'');
+  setobj({...obj,"Name":name});
+}
+function EmailCheck(email){
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailPattern.test(email)
+}
+async function Submit(e){
+  try {
+    e.preventDefault()
+    setbtndisable(true)
+    if(!obj.Name || !obj.Email || !obj.Password || !obj.ConfirmPassword) return alert("Field is Empty")
+    const response=EmailCheck(obj.Email)
+    if(!response) return alert("Email is not valid")
+    if(obj.Password!==obj.ConfirmPassword) return alert("Password not matched")
+    
+    const object={
+      Name:obj.Name,
+      Email:obj.Email
+    }  
+   const result=await auth.createUserWithEmailAndPassword(obj.Email,obj.Password)
+   setobj({})
+   Firebase.child("Users").child(result.user.uid).set(object,err=>{
+    if(err) return alert("Something Went Wrong. Try Again later.")
+    else return alert("Account Created Successfully")
+   })
+  } catch (error) {
+    return alert("Account related to this Email is already exist.")
+  } finally{
+    setbtndisable(false)
   }
-  function set(event){
-    SetObj({...Obj,[event.target.name]:event.target.value,"Date":date})
-  }
-  function EmailCheck(email){
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email)
 }
-async function save(e){
-try {
-  e.preventDefault()
-  disbtn(true)
-if(!Obj.Name || !Obj.Email || !Obj.Password ||!Obj.ConfirmPassword ) return alert("Field is Empty")
-  const response= EmailCheck(Obj.Email)
-if(!response) return alert("Email is not valid")
-  if(Obj.Password!==Obj.ConfirmPassword) return alert("Password not matched")
-
-const object={
-  Name: Obj.Name,
-  Email: Obj.Email
-}
-    const result= await auth.createUserWithEmailAndPassword(Obj.Email, Obj.Password)
-SetObj({})
-  Firebase.child("Users").child(result.user.uid).set(object,err=>{
-if(err) return alert("Something went wrong.")
-  else{
-alert("Account created successfully")
-}
-})
-
-} catch (error) {
-  return alert("This Email is already exist.")
-  console.log(error)
-}
-finally{
-  disbtn(false)
-}
-
-}
-
   return (
     <div className="login-wrap">
   <div className="login-bg">
-    <a  className="navbar-brand">
+    <a className="navbar-brand">
       <img className="logo-light" src="assets/img/logo-white.webp" alt="Image" />
       <img className="logo-dark" src="assets/img/logo-white.webp" alt="Image" />
     </a>
@@ -70,18 +64,18 @@ finally{
       </div>
       <form action="#">
         <div className="form-group">
-          <input type="text" value={Obj.Name?Obj.Name:""} onChange={NameChange}  placeholder="Full Name" />
+          <input type="text" value={obj.Name?obj.Name:""} onChange={NameChange} placeholder="Full Name" />
         </div>
         <div className="form-group">
-          <input type="email" onChange={set} value={Obj.Email?Obj.Email:""} name='Email' placeholder="Email Address" />
+          <input name='Email' value={obj.Email?obj.Email:""} onChange={set} type="email" placeholder="Email Address" />
         </div>
         <div className="form-group">
-          <input type="password" onChange={set} value={Obj.Password?Obj.Password:""} name='Password' placeholder="Password" />
+          <input type="password" name='Password' value={obj.Password?obj.Password:""} onChange={set} placeholder="Password" />
         </div>
         <div className="form-group">
-          <input type="password" onChange={set} value={Obj.ConfirmPassword?Obj.ConfirmPassword:""} name='ConfirmPassword' placeholder="Confirm Password" />
+          <input type="password" name='ConfirmPassword' value={obj.ConfirmPassword?obj.ConfirmPassword:""} onChange={set} placeholder="Confirm Password" />
         </div>
-        <button type="submit" disabled={btn} className="btn-two w-100 d-block" onClick={save}> Create Account</button>
+        <button disabled={btndisable} type="submit" onClick={Submit} className="btn-two w-100 d-block">Create Account</button>
         <p className="login-text">Already have an account?<a href="login.html">Login</a></p>
       </form>
     </div>
@@ -90,4 +84,4 @@ finally{
   )
 }
 
-export default Signup
+export default Signup

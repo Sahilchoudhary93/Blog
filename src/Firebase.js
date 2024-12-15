@@ -1,19 +1,17 @@
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/database'
-import 'firebase/compat/storage'
+import firebase from "firebase/compat/app"
+import "firebase/compat/auth"
+import "firebase/compat/database"
+import "firebase/compat/storage"
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAtbKTRPM2O_YHU1FXezDf57Vu8sTnTaGI",
-    authDomain: "bloggingweb-7e097.firebaseapp.com",
-    projectId: "bloggingweb-7e097",
-    storageBucket: "bloggingweb-7e097.appspot.com",
-    messagingSenderId: "7042042279",
-    appId: "1:7042042279:web:e4423ce6c73e3ec5634e82"
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID
   };
-
-  const app= firebase.initializeApp(firebaseConfig)
-  export default app.database().ref()
-  export const storage= app.storage().ref()
-  export const auth= app.auth()
-  
+const app=firebase.initializeApp(firebaseConfig)
+export default app.database().ref()
+export const storage= app.storage().ref()
+export const auth=app.auth()

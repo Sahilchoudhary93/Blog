@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Errorcomp = () => {
   return (
@@ -12,13 +13,12 @@ const Errorcomp = () => {
           <h2>Oops! Page Not Found</h2>
           <p>The page you are looking for might have been removed had its name changed or is temporarily
             unavailable.</p>
-          <a href="index.html" className="btn-one">Back To Home<i className="flaticon-right-arrow" /></a>
+          <Link to="/" className="btn-one">Back To Home<i className="flaticon-right-arrow" /></Link>
         </div>
       </div>
     </div>
   </div>
 </div>
-
     </div>
   )
 }
