@@ -4,12 +4,13 @@ import "firebase/compat/database"
 import "firebase/compat/storage"
 
 const firebaseConfig = {
-    apiKey: process.env.REACT_APP_API_KEY,
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-    projectId: process.env.REACT_APP_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_APP_ID
+  apiKey: "AIzaSyBQj9cjlXXgTZiXdYgTVAxS0JLSON_95UY",
+  authDomain: "fir-541a7.firebaseapp.com",
+  databaseURL: "https://fir-541a7-default-rtdb.firebaseio.com",
+  projectId: "fir-541a7",
+  storageBucket: "fir-541a7.appspot.com",
+  messagingSenderId: "997982141554",
+  appId: "1:997982141554:web:eab0bb7b21e0168d4e56eb"
   };
 const app=firebase.initializeApp(firebaseConfig)
 export default app.database().ref()
